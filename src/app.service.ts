@@ -18,10 +18,16 @@ class AppService {
   }
 
   async getTranslation(text: string, locale: string): Promise<string> {
+    const decodedText = decodeURIComponent(text)
+    const paragraphs = decodedText
+      .split('\n')
+      .map((paragraph) => `text=${encodeURIComponent(paragraph)}&`)
+      .join('')
+
     return firstValueFrom(
       this.httpService
         .get<TranslationResponse>(
-          `${this.deepLConfig.apiUrl}/v2/translate?text=${text}&target_lang=${locale}`,
+          `${this.deepLConfig.apiUrl}/v2/translate?${paragraphs}&target_lang=${locale}`,
           {
             headers: {
               Authorization: `DeepL-Auth-Key ${this.deepLConfig.authKey}`,
@@ -30,7 +36,11 @@ class AppService {
         )
         .pipe(
           map((res) => res.data),
-          map((translations) => translations.translations?.[0]?.text)
+          map((translations) =>
+            translations.translations
+              ?.map((translation) => translation.text)
+              .join('\n')
+          )
         )
         .pipe(
           catchError((error: AxiosError) => {
