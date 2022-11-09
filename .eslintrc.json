@@ -1,0 +1,53 @@
+{
+  "extends": [
+    "airbnb-base",
+    "airbnb-typescript/base",
+    "plugin:@typescript-eslint/recommended",
+    "prettier",
+    "plugin:jest/recommended"
+  ],
+  "env": {
+    "jest/globals": true
+  },
+  "plugins": ["@typescript-eslint", "jest"],
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
+  "ignorePatterns": ["jest.config.ts"],
+  "rules": {
+    // override airbnb import/extensions
+    // to include typescript
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "js": "never",
+        "ts": "never"
+      }
+    ],
+    "global-require": "off",
+    "import/no-anonymous-default-export": "error",
+    "import/no-extraneous-dependencies": "error",
+    "no-use-before-define": ["error", { "variables": false }],
+    "prefer-destructuring": "off",
+    "no-restricted-exports": "off",
+    "jest/valid-title": "off"
+  },
+  "overrides": [
+    {
+      "files": ["*.test.js", "*.test.ts"],
+      "rules": {
+        "no-underscore-dangle": "off",
+        "import/no-extraneous-dependencies": "off"
+      }
+    }
+  ],
+  "settings": {
+    "import/resolver": {
+      "alias": {
+        "map": [["@", "./src"]],
+        "extensions": [".ts", ".js", ".json"]
+      }
+    }
+  }
+}
