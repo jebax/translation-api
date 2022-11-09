@@ -1,12 +1,17 @@
-import { Controller, Get } from '@nestjs/common'
-import { AppService } from './app.service'
+import { Controller, Get, Query } from '@nestjs/common'
+import AppService from './app.service'
 
 @Controller()
-export class AppController {
+class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @Get()
-  getHello(): string {
-    return this.appService.getHello()
+  @Get('translate')
+  async getTranslation(
+    @Query('text') text: string,
+    @Query('locale') locale: string
+  ): Promise<string> {
+    return this.appService.getTranslation(text, locale)
   }
 }
+
+export default AppController
